@@ -18,6 +18,7 @@ function App() {
       <Link to="/map">地图</Link>
       <Switch>
         {/* 一级路由 */}
+        {/* 在home下配置二级路由（home文件夹内） */}
         <Route path="/home" component={Home}></Route>
         <Route path="/cityList" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
