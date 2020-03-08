@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 //ant-mobile组件库样式
-import 'antd-mobile/dist/antd-mobile.css';  // or 'antd-mobile/dist/antd-mobile.less'
+// import 'antd-mobile/dist/antd-mobile.css';  // or 'antd-mobile/dist/antd-mobile.less'
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
