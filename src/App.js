@@ -1,7 +1,7 @@
 import React from 'react';
 // import { Button , Checkbox } from 'antd-mobile'
 
-import { BrowserRouter as Router, Route , Link , Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route , Switch , Redirect } from 'react-router-dom'
 
 // const CheckboxItem = Checkbox.CheckboxItem;
 //导入路由对应组件
@@ -13,10 +13,12 @@ import NotFount from './pages/NotFount';
 function App() {
   return (
     <Router className="app">
-      <Link to="/home">首页</Link>
-      <Link to="/cityList">城市列表</Link>
-      <Link to="/map">地图</Link>
       <Switch>
+        {/* 重定向 */}
+        {/* 方法1 */}
+        {/* <Redirect exact from="/" to="/home" /> */}
+        {/* 方法2 */}
+        <Route path="/" exact render={()=><Redirect to="/home" />} />
         {/* 一级路由 */}
         {/* 在home下配置二级路由（home文件夹内） */}
         <Route path="/home" component={Home}></Route>
