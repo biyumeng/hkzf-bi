@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 //引入走马灯
-import { Carousel , Flex , Grid , WingBlank } from 'antd-mobile';
+import { Carousel , Flex , Grid , WingBlank , SearchBar } from 'antd-mobile';
 
 import { getSwiper , getGroup , getNews } from '../../utils/api/home'
 import {BASE_URL} from '../../utils/axios'
@@ -15,6 +15,8 @@ import navs from '../../utils/navs_config'
 
 class Index extends Component {
     state = {
+        //顶部搜索关键词
+        keyword:'',
         //最新资讯数据
         news: [],
         //宫格数据
@@ -146,9 +148,35 @@ class Index extends Component {
         ))
       }
 
+      // 渲染顶部导航
+      renderTopNav = () => {
+        const { push } = this.props.history;
+        return (
+          <Flex justify="around" className="topNav">
+            <div className="searchBox">
+              <div className="city" onClick={()=>push('/cityList')}>
+                北京<i className="iconfont icon-arrow" />
+              </div>
+              <SearchBar
+                value={this.state.keyword}
+                onChange={(v) => this.setState({ keyword: v })}
+                placeholder="请输入小区或地址"
+              />
+            </div>
+            <div className="map"  onClick={()=>push('/map')}>
+              <i key="0" className="iconfont icon-map" />
+            </div>
+          </Flex>
+        )
+      }
+
       render() {
         return (
           <div>
+            {/* 顶部导航 */}
+            {
+              this.renderTopNav()
+            }
 
             {/* 轮播图 */}
             <Carousel

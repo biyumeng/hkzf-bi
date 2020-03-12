@@ -20,9 +20,11 @@ function App() {
         {/* 方法2 */}
         <Route path="/" exact render={()=><Redirect to="/home" />} />
         {/* 一级路由 */}
-        {/* 在home下配置二级路由（home文件夹内） */}
+        {/* 首页 在home下配置二级路由（home文件夹内） */}
         <Route path="/home" component={Home}></Route>
+        {/* 城市列表 */}
         <Route path="/cityList" component={CityList}></Route>
+        {/* 地图找房 */}
         <Route path="/map" component={Map}></Route>
 
         {/* 404页面 */}
