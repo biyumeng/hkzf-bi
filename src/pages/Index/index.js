@@ -54,7 +54,7 @@ class Index extends Component {
           myCity.get(async (result)=>{
               let cityName = result.name;
               const res =await getCityInfo(cityName);
-              console.log(res)
+              // console.log(res)
               if (res.status===200) {
                 this.setState({
                   currCity:res.data
