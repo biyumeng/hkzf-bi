@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 //引入走马灯
 import { Carousel , Flex , Grid , WingBlank , SearchBar } from 'antd-mobile';
 
+//首页接口
 import { getSwiper , getGroup , getNews } from '../../utils/api/home'
+//城市信息接口
+import { getCityInfo } from '../../utils/api/city';
+
 import {BASE_URL} from '../../utils/axios'
 // import { log } from 'util';
 
@@ -27,6 +31,11 @@ class Index extends Component {
         autoPlay:false,
         //轮播图高度
         imgHeight: 212,
+        //当前城市数据
+        currCity:{
+          label:"--",
+          value:''
+        }
       }
       componentDidMount() {
         //代码多余，用Promise.all统一处理
@@ -34,6 +43,24 @@ class Index extends Component {
         // this.getGroup()
         // this.getNews()
         this.getAllData()
+        this.getCurrCity()
+      }
+
+      //获取当前城市
+      getCurrCity=()=>{
+          //定位
+          let myCity = new window.BMap.LocalCity();
+          //获取定位信息
+          myCity.get(async (result)=>{
+              let cityName = result.name;
+              const res =await getCityInfo(cityName);
+              console.log(res)
+              if (res.status===200) {
+                this.setState({
+                  currCity:res.data
+                })
+              }
+          }); 
       }
 
       //使用Promise.all统一处理首页首页接口调用
@@ -155,7 +182,7 @@ class Index extends Component {
           <Flex justify="around" className="topNav">
             <div className="searchBox">
               <div className="city" onClick={()=>push('/cityList')}>
-                北京<i className="iconfont icon-arrow" />
+                {this.state.currCity.label}<i className="iconfont icon-arrow" />
               </div>
               <SearchBar
                 value={this.state.keyword}

@@ -19,6 +19,10 @@ ul,li {
     list-style: none;
 }
 
+#root, .mapBox, #container {
+    height: 100%;
+}
+
 * {
     touch-action: pan-y;
     touch-action: none ; 
