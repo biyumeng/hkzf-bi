@@ -27,49 +27,69 @@ class Index extends Component {
         imgHeight: 212,
       }
       componentDidMount() {
-        this.getSwiper()
-        this.getGroup()
-        this.getNews()
+        //代码多余，用Promise.all统一处理
+        // this.getSwiper()
+        // this.getGroup()
+        // this.getNews()
+        this.getAllData()
       }
 
-      //获取轮播图数据
-      getSwiper = async()=>{
-        const {data,status} = await getSwiper()
-        // console.log(res);
-        // const {body,status} = res
-        if(status === 200 ){
-            this.setState({
-                swiper:data
-            },()=>{
-                //因为是异步的，所以有数据后再设置自动播放
+      //使用Promise.all统一处理首页首页接口调用
+      getAllData = async ()=>{
+        const res = await Promise.all([getSwiper() , getGroup() , getNews()]);
+        if ( res[0].status === 200 ) {
+          this.setState({
+            swiper:res[0].data,
+            grid:res[1].data,
+            news:res[2].data
+          },()=>{
+            //因为是异步的，所以有轮播图数据（也就是res[0]）获取后再设置自动播放
                 this.setState(({
                     autoPlay:true
                 }))
-            })
+            }
+          )
         }
       }
 
-      //获取租房小组数据
-      getGroup = async()=>{
-        const {data,status} = await getGroup()
-        // console.log(data,status);
-        if(status===200){
-          this.setState({
-            grid:data
-          })
-        }
-      }
+      // //获取轮播图数据
+      // getSwiper = async()=>{
+      //   const {data,status} = await getSwiper()
+      //   // console.log(res);
+      //   // const {body,status} = res
+      //   if(status === 200 ){
+      //       this.setState({
+      //           swiper:data
+      //       },()=>{
+      //           //因为是异步的，所以有数据后再设置自动播放
+      //           this.setState(({
+      //               autoPlay:true
+      //           }))
+      //       })
+      //   }
+      // }
 
-      //获取首页最新资讯
-      getNews = async()=>{
-        const {data,status} = await getNews()
-        // console.log(data,status);
-        if(status===200){
-          this.setState({
-            news:data
-          })
-        }
-      }
+      // //获取租房小组数据
+      // getGroup = async()=>{
+      //   const {data,status} = await getGroup()
+      //   // console.log(data,status);
+      //   if(status===200){
+      //     this.setState({
+      //       grid:data
+      //     })
+      //   }
+      // }
+
+      // //获取首页最新资讯
+      // getNews = async()=>{
+      //   const {data,status} = await getNews()
+      //   // console.log(data,status);
+      //   if(status===200){
+      //     this.setState({
+      //       news:data
+      //     })
+      //   }
+      // }
 
       //渲染轮播图
       renderSwiper=()=>{
