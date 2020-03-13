@@ -6,7 +6,8 @@ import { Carousel , Flex , Grid , WingBlank , SearchBar } from 'antd-mobile';
 //首页接口
 import { getSwiper , getGroup , getNews } from '../../utils/api/home'
 //城市信息接口
-import { getCityInfo } from '../../utils/api/city';
+// import { getCityInfo } from '../../utils/api/city';
+import { getCurrCity } from '../../utils';
 
 import {BASE_URL} from '../../utils/axios'
 // import { log } from 'util';
@@ -47,20 +48,11 @@ class Index extends Component {
       }
 
       //获取当前城市
-      getCurrCity=()=>{
-          //定位
-          let myCity = new window.BMap.LocalCity();
-          //获取定位信息
-          myCity.get(async (result)=>{
-              let cityName = result.name;
-              const res =await getCityInfo(cityName);
-              // console.log(res)
-              if (res.status===200) {
-                this.setState({
-                  currCity:res.data
-                })
-              }
-          }); 
+      getCurrCity = async ()=>{
+          let res =await getCurrCity();
+          this.setState({
+            currCity:res
+          })
       }
 
       //使用Promise.all统一处理首页首页接口调用

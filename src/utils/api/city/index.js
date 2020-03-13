@@ -22,3 +22,9 @@ export function getCityList(level=1) {
         }
     })
 }
+
+//获取热门城市数据
+export function getHotCity() {
+    //返回了一个Promise对象
+    return axios.get('/area/hot')
+}
