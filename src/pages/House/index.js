@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import { Flex } from 'antd-mobile'
+import { Flex , Toast} from 'antd-mobile'
 import { List , AutoSizer , InfiniteLoader } from 'react-virtualized'
-
+ 
 import Filter from './components/Filter'
 // 导入样式（css module）
 import styles from './index.module.css'
@@ -13,6 +13,8 @@ import { getCurrCity } from '../../utils'
 import { getHouseList } from '../../utils/api/house'
 import HouseItem from '../../components/HouseItem'
 import { BASE_URL } from '../../utils/axios'
+
+import NoHouse from '../../components/NoHouse'
 
 
 export default class HouseList extends React.Component {
@@ -43,6 +45,9 @@ export default class HouseList extends React.Component {
     const {status , data:{list,count}} = await getHouseList(this.cityId , this.filters)
     // console.log('222',res)
     if (status===200) {
+      if (count>0) {
+        Toast.success(`获取到${count}条房源数据`,2)
+      }
       this.setState({
         list,
         count
@@ -70,15 +75,19 @@ export default class HouseList extends React.Component {
 
     const {list} = this.state;
     let curItem = list[index];
-    //数据正在获取
+    //数据正在获取,显示骨架屏
     if (!curItem) {
-      return null;
+      return (
+        <div style={style} key={key}>
+          <p className={styles.loading}></p>
+        </div>
+      )
     }
     //处理图片地址
     curItem.src = BASE_URL + curItem.houseImg
 
     return (
-      <HouseItem {...curItem} key={key} style={style} />
+      <HouseItem onClick={() =>this.props.history.push(`/detail/${curItem.houseCode}`)} {...curItem} key={key} style={style} />
     );
   }
 
@@ -86,7 +95,7 @@ export default class HouseList extends React.Component {
   renderHouseList=()=>{
     const {list,count} = this.state;
     return(
-
+      count?
       <InfiniteLoader
       isRowLoaded={this.isRowLoaded}
       loadMoreRows={this.loadMoreRows}
@@ -108,7 +117,7 @@ export default class HouseList extends React.Component {
       )}
       </AutoSizer>
       )}
-      </InfiniteLoader>
+      </InfiniteLoader>:<NoHouse>无房源数据</NoHouse>
 
     )
   }

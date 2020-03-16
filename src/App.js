@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import CityList from './pages/CityList';
 import Map from './pages/Map';
 import NotFount from './pages/NotFount';
+import HouseDetail from './components/HouseDetail';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
         <Route path="/home" component={Home}></Route>
         {/* 城市列表 */}
         <Route path="/cityList" component={CityList}></Route>
+        {/* 房源详情 */}
+        <Route path="/detail/:id" component={HouseDetail}></Route>
         {/* 地图找房 */}
         <Route path="/map" component={Map}></Route>
 

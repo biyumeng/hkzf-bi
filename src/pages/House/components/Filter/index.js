@@ -94,16 +94,15 @@ export default class Filter extends Component {
     // console.log(area,mode,price,more)
     //2.根据后台需要数据格式进行处理
     const filtes = {};
-    let areaKey=area[0];
-    let areaVal;
+    let areaKey=area[0],areaVal;
     if (area.length === 2) {
       areaVal = area[1]
     }else{
       //如果区域选项第三位不是null
-      if (area[2]==='null') {
-        areaVal =area[1]
-      }else{
+      if (area[2]!=='null') {
         areaVal =area[2]
+      }else{
+        areaVal =area[1]
       }
     }
     filtes[areaKey] = areaVal;

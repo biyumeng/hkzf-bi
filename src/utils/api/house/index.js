@@ -26,3 +26,9 @@ export function getHouseList(id, filters, start=1 , end=20) {
     })
 }
 
+//获取房源详情
+export function getHouseDetail(id) {
+    //返回了一个Promise对象
+    return axios.get(`/houses/${id}`)
+}
+
