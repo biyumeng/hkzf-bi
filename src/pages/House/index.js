@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { Flex } from 'antd-mobile'
-import { List , AutoSizer } from 'react-virtualized'
+import { List , AutoSizer , InfiniteLoader } from 'react-virtualized'
 
 import Filter from './components/Filter'
 // 导入样式（css module）
@@ -19,7 +19,9 @@ export default class HouseList extends React.Component {
 
   state = {
     // 房屋列表数据
-    list:[]
+    list:[],
+    //列表总条数
+    count:0
   } 
 
   componentDidMount(){
@@ -38,11 +40,12 @@ export default class HouseList extends React.Component {
 
   //获取房源列表数据
   getHouseList = async () =>{
-    const {status , data:{list}} = await getHouseList(this.cityId , this.filters)
+    const {status , data:{list,count}} = await getHouseList(this.cityId , this.filters)
     // console.log('222',res)
     if (status===200) {
       this.setState({
-        list
+        list,
+        count
       })
     }
   }
@@ -67,6 +70,10 @@ export default class HouseList extends React.Component {
 
     const {list} = this.state;
     let curItem = list[index];
+    //数据正在获取
+    if (!curItem) {
+      return null;
+    }
     //处理图片地址
     curItem.src = BASE_URL + curItem.houseImg
 
@@ -77,21 +84,54 @@ export default class HouseList extends React.Component {
 
   //渲染房源列表组件
   renderHouseList=()=>{
-    const {list} = this.state;
+    const {list,count} = this.state;
     return(
-      <AutoSizer>
-              {({ height, width }) => (
-                <List
-                  className={styles.houseList}
-                  height={height}
-                  rowCount={list.length}
-                  rowHeight={130}
-                  rowRenderer={this.renderHouseItem}
-                  width={width}
-              />
-            )}
-        </AutoSizer>
+
+      <InfiniteLoader
+      isRowLoaded={this.isRowLoaded}
+      loadMoreRows={this.loadMoreRows}
+      rowCount={count}
+      >
+      {({ onRowsRendered, registerChild }) => (
+        <AutoSizer>
+        {({ height, width }) => (
+          <List
+            className={styles.houseList}
+            height={height}
+            onRowsRendered={onRowsRendered}
+            ref={registerChild}
+            rowCount={count}
+            rowHeight={130}
+            rowRenderer={this.renderHouseItem}
+            width={width}
+        />
+      )}
+      </AutoSizer>
+      )}
+      </InfiniteLoader>
+
     )
+  }
+
+  //下拉加载更多
+  //行是否加载完成
+  isRowLoaded = ({ index })=> {
+    return !!this.state.list[index];
+  }
+  //下拉加载更多数据
+  loadMoreRows = ({ startIndex, stopIndex })=> {
+    return getHouseList(this.cityId , this.filters,startIndex, stopIndex)
+      .then(response => {
+        // Store response data in list...
+        // console.log(startIndex, stopIndex,response)
+        const {status,data:{list,count}} = response;
+        if (status===200) {
+          this.setState({
+            list:[...this.state.list, ...list],
+            count
+          })
+        }
+      })
   }
 
   render() {

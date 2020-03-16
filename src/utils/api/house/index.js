@@ -14,12 +14,14 @@ export function getPickerData(id) {
 }
 
 //获取房源列表数据
-export function getHouseList(id, filters) {
+export function getHouseList(id, filters, start=1 , end=20) {
     //返回了一个Promise对象
     return axios.get('/houses',{
         params:{
             id,
-            ...filters
+            ...filters,
+            start,
+            end
         }
     })
 }
